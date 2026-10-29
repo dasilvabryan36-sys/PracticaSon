@@ -4,12 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class VentanaMatrizHilos extends JFrame {
     HiloCazador hcaz;
     HiloClima hcli;
     HiloLimpiador hlim;
     HiloRebotador hreb;
     HiloSerpiente hser;
+    private Thread hiloRebotadorThread;
 
     // Matriz de 15x15 JLabels (Recurso Compartido)
     private JLabel[][] matriz = new JLabel[15][15];
@@ -20,14 +22,37 @@ public class VentanaMatrizHilos extends JFrame {
     private JButton btTerminarS;
 
     // Botones Hilo Cazador
+   
     private JButton btIniciarC;
     private JButton btPausaC;
     private JButton btTerminarC;
 
     // Botones Hilo Rebotador
+
     private JButton btIniciarR;
     private JButton btPausaR;
     private JButton btTerminarR;
+
+ // -----------------------------------------------------------------
+// Métodos privados para manejo de eventos (Rebotador)
+// -----------------------------------------------------------------
+private void iniciarRebotador() {
+    if (hiloRebotadorThread == null || !hiloRebotadorThread.isAlive()) {
+        hreb = new HiloRebotador(matriz, 0, 0);
+        hiloRebotadorThread = new Thread(hreb);
+        hiloRebotadorThread.start();
+    }
+}
+
+private void pausarRebotador() {
+    System.out.println("Evento: Pausar Rebotador");
+}
+
+private void terminarRebotador() {
+    if (hreb != null) {
+        hreb.detener();
+    }
+}
 
     // Botones Hilo Clima
     private JButton btIniciarCl;
